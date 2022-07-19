@@ -1,7 +1,9 @@
 from enum import Enum
 from PyQt6.QtGui import QImage
-from winrt.windows.media.control import GlobalSystemMediaTransportControlsSessionManager
-from winrt.windows.storage.streams import DataReader, Buffer, InputStreamOptions
+from winsdk.windows.media.control import (
+    GlobalSystemMediaTransportControlsSessionManager,
+)
+from winsdk.windows.storage.streams import DataReader, Buffer, InputStreamOptions
 
 THUMBNAIL_BUFFER_SIZE = 5 * 1024 * 1024
 
@@ -27,9 +29,7 @@ async def get_current_session():
 
 
 def props_to_dict(props):
-    return {
-        attr: props.__getattribute__(attr) for attr in dir(props) if attr[0] != '_'
-    }
+    return {attr: props.__getattribute__(attr) for attr in dir(props) if attr[0] != "_"}
 
 
 async def get_media_info():
@@ -51,7 +51,7 @@ async def get_media_info():
     if current_session:
         media_props = await current_session.try_get_media_properties_async()
         media_props = props_to_dict(media_props)
-        del media_props['genres']
+        del media_props["genres"]
         return media_props
 
 
@@ -87,14 +87,16 @@ async def get_playback_info():
     if current_session:
         playback_props = current_session.get_playback_info()
         playback_props = props_to_dict(playback_props)
-        playback_props['controls'] = props_to_dict(playback_props['controls'])
+        playback_props["controls"] = props_to_dict(playback_props["controls"])
         return playback_props
 
 
 async def stream_to_image(thumbnail_ref) -> QImage:
     buffer = Buffer(THUMBNAIL_BUFFER_SIZE)
     readable_stream = await thumbnail_ref.open_read_async()
-    await readable_stream.read_async(buffer, buffer.capacity, InputStreamOptions.READ_AHEAD)
+    await readable_stream.read_async(
+        buffer, buffer.capacity, InputStreamOptions.READ_AHEAD
+    )
     buffer_reader = DataReader.from_buffer(buffer)
     thumbnail_buffer = buffer_reader.read_bytes(buffer.length)
     thumbnail_image = QImage()
