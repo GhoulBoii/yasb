@@ -508,6 +508,7 @@ widgets:
         run_interval: 3600000
         return_format: "json"
 
+<<<<<<< HEAD
   windows_media:
     type: "win32.media_player.MediaWidget"
     options:
@@ -526,3 +527,5 @@ widgets:
         repeat_off: "\uf2f9"
         repeat_track: "\uf2f9 (T)"
         repeat_list: "\uf2f9 (L)"
+=======
+>>>>>>> f4b7a1f33881652d75146e4c2ab77b1b72da90ba
